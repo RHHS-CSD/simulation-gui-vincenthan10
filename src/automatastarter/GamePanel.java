@@ -50,7 +50,41 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     public GamePanel(CardSwitcher p) {
         initComponents();
 
-        img1 = ImageUtil.loadAndResizeImage("yourFile.jpg", 300, 300);//, WIDTH, HEIGHT)//ImageIO.read(new File("yourFile.jpg"));
+        //img1 = ImageUtil.loadAndResizeImage("yourFile.jpg", 300, 300);//, WIDTH, HEIGHT)//ImageIO.read(new File("yourFile.jpg"));
+        widthSlider.setMinimum(5);
+        widthSlider.setMaximum(25);
+        widthSlider.setValue(10);
+        widthSlider.setMajorTickSpacing(10);
+        widthSlider.setMinorTickSpacing(5);
+        widthSlider.setPaintLabels(true);
+        widthSlider.setPaintTicks(true);
+        widthSlider.setPaintTrack(true);
+        
+        heightSlider.setMinimum(5);
+        heightSlider.setMaximum(25);
+        heightSlider.setValue(10);
+        heightSlider.setMajorTickSpacing(10);
+        heightSlider.setMinorTickSpacing(5);
+        heightSlider.setPaintLabels(true);
+        heightSlider.setPaintTicks(true);
+        heightSlider.setPaintTrack(true);
+        
+        preySlider.setMinimum(20);
+        preySlider.setMaximum(80);
+        preySlider.setValue(40);
+        preySlider.setMajorTickSpacing(20);
+        preySlider.setMinorTickSpacing(10);
+        preySlider.setPaintLabels(true);
+        preySlider.setPaintTicks(true);
+        preySlider.setPaintTrack(true);
+        
+        predatorSlider.setMinimum(5);
+        predatorSlider.setMaximum(20);
+        predatorSlider.setValue(10);
+        predatorSlider.setMajorTickSpacing(5);
+        predatorSlider.setPaintLabels(true);
+        predatorSlider.setPaintTicks(true);
+        predatorSlider.setPaintTrack(true);
 
         this.setFocusable(true);
 
@@ -84,10 +118,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (img1 != null) {
-            g.drawImage(img1, x, y, this);
-        }
-        g.drawLine(lineX, 0, 300, 300);
+        
     }
 
     /**
@@ -99,31 +130,82 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        widLabel = new javax.swing.JLabel();
+        widthSlider = new javax.swing.JSlider();
+        heiLabel = new javax.swing.JLabel();
+        heightSlider = new javax.swing.JSlider();
+        preyLabel = new javax.swing.JLabel();
+        preySlider = new javax.swing.JSlider();
+        predLabel = new javax.swing.JLabel();
+        predatorSlider = new javax.swing.JSlider();
+        createButton = new javax.swing.JButton();
 
+        setPreferredSize(new java.awt.Dimension(1080, 580));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
 
-        jLabel1.setText("Game");
+        widLabel.setText("Width: ");
+
+        heiLabel.setText("Height:");
+
+        preyLabel.setText("% of prey:");
+
+        predLabel.setText("% of predators:");
+
+        createButton.setText("Create grid!");
+        createButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(174, 174, 174)
-                .addComponent(jLabel1)
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(heiLabel))
+                    .addComponent(widthSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(widLabel))
+                    .addComponent(heightSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(preyLabel)
+                    .addComponent(preySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(predLabel)
+                    .addComponent(predatorSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(createButton))
+                .addContainerGap(950, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(135, 135, 135)
-                .addComponent(jLabel1)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(widLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(widthSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(heiLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(heightSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(preyLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(preySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(predLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(predatorSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(createButton)
+                .addContainerGap(272, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -131,9 +213,21 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         lineX = 0;
     }//GEN-LAST:event_formComponentShown
 
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton createButton;
+    private javax.swing.JLabel heiLabel;
+    private javax.swing.JSlider heightSlider;
+    private javax.swing.JLabel predLabel;
+    private javax.swing.JSlider predatorSlider;
+    private javax.swing.JLabel preyLabel;
+    private javax.swing.JSlider preySlider;
+    private javax.swing.JLabel widLabel;
+    private javax.swing.JSlider widthSlider;
     // End of variables declaration//GEN-END:variables
 
     /**
