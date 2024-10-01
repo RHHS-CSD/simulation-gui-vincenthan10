@@ -66,7 +66,7 @@ public class PredatorSimulation {
      * @param predators the number of predators
      * @param preys the number of prey
      */
-    public static void fillGrid(int[][] grid, int width, int height, ArrayList<ArrayList<Integer>> predators, ArrayList<ArrayList<Integer>> preys) {
+    public void fillGrid() {
         // fill the entire grid with "empty" spaces
         for (int i = 0; i < width; i++) {
             Arrays.fill(grid[i], 0);
@@ -110,38 +110,38 @@ public class PredatorSimulation {
      * @param grid the grid in which they move around in
      * @return grid with the new locations of prey
      */
-    public static int[][] movePrey(int[][] grid, ArrayList<ArrayList<Integer>> prey) {
+    public void movePrey() {
         // move prey
-        for (int i = 0; i < prey.size(); i++) {
+        for (int i = 0; i < preys.size(); i++) {
             // only move prey if it's alive
-            if (prey.get(i).get(0) >= 0) {
-                prey.get(i).set(2, prey.get(i).get(2) + 1);
-                int up = prey.get(i).get(0) - 1;
-                int down = prey.get(i).get(0) + 1;
-                int left = prey.get(i).get(1) - 1;
-                int right = prey.get(i).get(1) + 1;
+            if (preys.get(i).get(0) >= 0) {
+                preys.get(i).set(2, preys.get(i).get(2) + 1);
+                int up = preys.get(i).get(0) - 1;
+                int down = preys.get(i).get(0) + 1;
+                int left = preys.get(i).get(1) - 1;
+                int right = preys.get(i).get(1) + 1;
                 boolean canUp = false;
                 boolean canDown = false;
                 boolean canLeft = false;
                 boolean canRight = false;
                 // check if prey can move to each adjacent cell
                 if (up >= 0) {
-                    if (grid[up][prey.get(i).get(1)] == 0) {
+                    if (grid[up][preys.get(i).get(1)] == 0) {
                         canUp = true;
                     }
                 }
                 if (down < grid.length) {
-                    if (grid[down][prey.get(i).get(1)] == 0) {
+                    if (grid[down][preys.get(i).get(1)] == 0) {
                         canDown = true;
                     }
                 }
                 if (left >= 0) {
-                    if (grid[prey.get(i).get(0)][left] == 0) {
+                    if (grid[preys.get(i).get(0)][left] == 0) {
                         canLeft = true;
                     }
                 }
                 if (right < grid[0].length) {
-                    if (grid[prey.get(i).get(0)][right] == 0) {
+                    if (grid[preys.get(i).get(0)][right] == 0) {
                         canRight = true;
                     }
                 }
@@ -151,42 +151,41 @@ public class PredatorSimulation {
                 // if a number is generated and prey cannot move in that direction, generate until it can
                 // only generate numbers if prey can move in at least one adjacent cell
 
-                grid[prey.get(i).get(0)][prey.get(i).get(1)] = 0;
+                grid[preys.get(i).get(0)][preys.get(i).get(1)] = 0;
                 if (canUp || canDown || canLeft || canRight) {
                     while (!movable) {
                         random = new Random().nextInt(4);
                         if (random == 0 && canUp) {
                             movable = true;
-                            grid[up][prey.get(i).get(1)] = 1;
-                            System.out.println("prey up from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
-                            prey.get(i).set(0, up);
+                            grid[up][preys.get(i).get(1)] = 1;
+                            //System.out.println("prey up from " + preys.get(i).get(0) + ", " + preys.get(i).get(1));
+                            preys.get(i).set(0, up);
                         } else if (random == 1 && canDown) {
                             movable = true;
-                            grid[down][prey.get(i).get(1)] = 1;
-                            System.out.println("prey down from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
-                            prey.get(i).set(0, down);
+                            grid[down][preys.get(i).get(1)] = 1;
+                            //System.out.println("prey down from " + preys.get(i).get(0) + ", " + preys.get(i).get(1));
+                            preys.get(i).set(0, down);
                         } else if (random == 2 && canLeft) {
                             movable = true;
-                            grid[prey.get(i).get(0)][left] = 1;
-                            System.out.println("prey left from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
-                            prey.get(i).set(1, left);
+                            grid[preys.get(i).get(0)][left] = 1;
+                            //System.out.println("prey left from " + preys.get(i).get(0) + ", " + preys.get(i).get(1));
+                            preys.get(i).set(1, left);
                         } else if (random == 3 && canRight) {
                             movable = true;
-                            grid[prey.get(i).get(0)][right] = 1;
-                            System.out.println("prey right from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
-                            prey.get(i).set(1, right);
+                            grid[preys.get(i).get(0)][right] = 1;
+                            //System.out.println("prey right from " + preys.get(i).get(0) + ", " + preys.get(i).get(1));
+                            preys.get(i).set(1, right);
                         }
                     }
 
                 } else {
                     // prey dies
-                    System.out.println("can't move");
-                    prey.get(i).set(0, -1);
-                    prey.get(i).set(1, -1);
+                    //System.out.println("can't move");
+                    preys.get(i).set(0, -1);
+                    preys.get(i).set(1, -1);
                 }
             }
         }
-        return grid;
     }
 
     /**
@@ -198,18 +197,18 @@ public class PredatorSimulation {
      * @param predator
      * @return the grid with new predator locations
      */
-    public static int[][] movePred(int[][] grid, ArrayList<ArrayList<Integer>> prey, ArrayList<ArrayList<Integer>> predator) {
+    public void movePred() {
         // move predators
-        for (int i = 0; i < predator.size(); i++) {
+        for (int i = 0; i < predators.size(); i++) {
             // only move predator if it's alive
-            if (predator.get(i).get(0) >= 0) {
+            if (predators.get(i).get(0) >= 0) {
                 //increase the number of steps since last prey eaten
-                predator.get(i).set(3, predator.get(i).get(3) + 1);
+                predators.get(i).set(3, predators.get(i).get(3) + 1);
 
-                int up = predator.get(i).get(0) - 1;
-                int down = predator.get(i).get(0) + 1;
-                int left = predator.get(i).get(1) - 1;
-                int right = predator.get(i).get(1) + 1;
+                int up = predators.get(i).get(0) - 1;
+                int down = predators.get(i).get(0) + 1;
+                int left = predators.get(i).get(1) - 1;
+                int right = predators.get(i).get(1) + 1;
                 boolean canUp = false;
                 boolean canDown = false;
                 boolean canLeft = false;
@@ -221,30 +220,30 @@ public class PredatorSimulation {
 
                 // check if predator can move to each adjacent cell
                 if (up >= 0) {
-                    if (grid[up][predator.get(i).get(1)] == 1) {
+                    if (grid[up][predators.get(i).get(1)] == 1) {
                         preyUp = true;
-                    } else if (grid[up][predator.get(i).get(1)] == 0) {
+                    } else if (grid[up][predators.get(i).get(1)] == 0) {
                         canUp = true;
                     }
                 }
                 if (down < grid.length) {
-                    if (grid[down][predator.get(i).get(1)] == 1) {
+                    if (grid[down][predators.get(i).get(1)] == 1) {
                         preyDown = true;
-                    } else if (grid[down][predator.get(i).get(1)] == 0) {
+                    } else if (grid[down][predators.get(i).get(1)] == 0) {
                         canDown = true;
                     }
                 }
                 if (left >= 0) {
-                    if (grid[predator.get(i).get(0)][left] == 1) {
+                    if (grid[predators.get(i).get(0)][left] == 1) {
                         preyLeft = true;
-                    } else if (grid[predator.get(i).get(0)][left] == 0) {
+                    } else if (grid[predators.get(i).get(0)][left] == 0) {
                         canLeft = true;
                     }
                 }
                 if (right < grid[0].length) {
-                    if (grid[predator.get(i).get(0)][right] == 1) {
+                    if (grid[predators.get(i).get(0)][right] == 1) {
                         preyRight = true;
-                    } else if (grid[predator.get(i).get(0)][right] == 0) {
+                    } else if (grid[predators.get(i).get(0)][right] == 0) {
                         canRight = true;
                     }
                 }
@@ -278,91 +277,91 @@ public class PredatorSimulation {
                         random = new Random().nextInt(4);
                         if (random == 0 && canUp) {
                             movable = true;
-                            grid[predator.get(i).get(0)][predator.get(i).get(1)] = 0;
+                            grid[predators.get(i).get(0)][predators.get(i).get(1)] = 0;
                             // if the cell contains a prey, eat the prey
                             if (preyUp) {
-                                for (int j = 0; j < prey.size(); j++) {
-                                    if (predator.get(i).get(0) - 1 == prey.get(j).get(0) && predator.get(i).get(1) == prey.get(j).get(1)) {
-                                        System.out.println("eaten" + prey.get(j).get(0) + ", " + prey.get(j).get(1));
-                                        prey.get(j).set(0, -1);
-                                        prey.get(j).set(1, -1);
-                                        predator.get(i).set(2, predator.get(i).get(2) + 1);
-                                        predator.get(i).set(3, 0);
+                                for (int j = 0; j < preys.size(); j++) {
+                                    if (predators.get(i).get(0) - 1 == preys.get(j).get(0) && predators.get(i).get(1) == preys.get(j).get(1)) {
+                                        //System.out.println("eaten" + preys.get(j).get(0) + ", " + preys.get(j).get(1));
+                                        preys.get(j).set(0, -1);
+                                        preys.get(j).set(1, -1);
+                                        predators.get(i).set(2, predators.get(i).get(2) + 1);
+                                        predators.get(i).set(3, 0);
                                         break;
                                     }
                                 }
                             }
-                            grid[up][predator.get(i).get(1)] = 2;
-                            System.out.println("pred up from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
-                            predator.get(i).set(0, up);
+                            grid[up][predators.get(i).get(1)] = 2;
+                            //System.out.println("pred up from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
+                            predators.get(i).set(0, up);
                         } else if (random == 1 && canDown) {
                             movable = true;
-                            grid[predator.get(i).get(0)][predator.get(i).get(1)] = 0;
+                            grid[predators.get(i).get(0)][predators.get(i).get(1)] = 0;
                             if (preyDown) {
-                                for (int j = 0; j < prey.size(); j++) {
-                                    if (predator.get(i).get(0) + 1 == prey.get(j).get(0) && predator.get(i).get(1) == prey.get(j).get(1)) {
-                                        System.out.println("eaten" + prey.get(j).get(0) + ", " + prey.get(j).get(1));
-                                        prey.get(j).set(0, -1);
-                                        prey.get(j).set(1, -1);
-                                        predator.get(i).set(2, predator.get(i).get(2) + 1);
-                                        predator.get(i).set(3, 0);
+                                for (int j = 0; j < preys.size(); j++) {
+                                    if (predators.get(i).get(0) + 1 == preys.get(j).get(0) && predators.get(i).get(1) == preys.get(j).get(1)) {
+                                        //System.out.println("eaten" + preys.get(j).get(0) + ", " + preys.get(j).get(1));
+                                        preys.get(j).set(0, -1);
+                                        preys.get(j).set(1, -1);
+                                        predators.get(i).set(2, predators.get(i).get(2) + 1);
+                                        predators.get(i).set(3, 0);
                                         break;
                                     }
                                 }
                             }
-                            grid[down][predator.get(i).get(1)] = 2;
-                            System.out.println("pred down from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
-                            predator.get(i).set(0, down);
+                            grid[down][predators.get(i).get(1)] = 2;
+                            //System.out.println("pred down from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
+                            predators.get(i).set(0, down);
 
                         } else if (random == 2 && canLeft) {
                             movable = true;
-                            grid[predator.get(i).get(0)][predator.get(i).get(1)] = 0;
+                            grid[predators.get(i).get(0)][predators.get(i).get(1)] = 0;
                             if (preyLeft) {
-                                for (int j = 0; j < prey.size(); j++) {
-                                    if (predator.get(i).get(0) == prey.get(j).get(0) && predator.get(i).get(1) - 1 == prey.get(j).get(1)) {
-                                        System.out.println("eaten" + prey.get(j).get(0) + ", " + prey.get(j).get(1));
-                                        prey.get(j).set(0, -1);
-                                        prey.get(j).set(1, -1);
-                                        predator.get(i).set(2, predator.get(i).get(2) + 1);
-                                        predator.get(i).set(3, 0);
+                                for (int j = 0; j < preys.size(); j++) {
+                                    if (predators.get(i).get(0) == preys.get(j).get(0) && predators.get(i).get(1) - 1 == preys.get(j).get(1)) {
+                                        //System.out.println("eaten" + preys.get(j).get(0) + ", " + preys.get(j).get(1));
+                                        preys.get(j).set(0, -1);
+                                        preys.get(j).set(1, -1);
+                                        predators.get(i).set(2, predators.get(i).get(2) + 1);
+                                        predators.get(i).set(3, 0);
                                         break;
                                     }
                                 }
                             }
-                            grid[predator.get(i).get(0)][left] = 2;
-                            System.out.println("pred left from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
-                            predator.get(i).set(1, left);
+                            grid[predators.get(i).get(0)][left] = 2;
+                            //System.out.println("pred left from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
+                            predators.get(i).set(1, left);
 
                         } else if (random == 3 && canRight) {
                             movable = true;
-                            grid[predator.get(i).get(0)][predator.get(i).get(1)] = 0;
+                            grid[predators.get(i).get(0)][predators.get(i).get(1)] = 0;
                             if (preyRight) {
-                                for (int j = 0; j < prey.size(); j++) {
-                                    if (predator.get(i).get(0) == prey.get(j).get(0) && predator.get(i).get(1) + 1 == prey.get(j).get(1)) {
-                                        System.out.println("eaten" + prey.get(j).get(0) + ", " + prey.get(j).get(1));
-                                        prey.get(j).set(0, -1);
-                                        prey.get(j).set(1, -1);
-                                        predator.get(i).set(2, predator.get(i).get(2) + 1);
-                                        predator.get(i).set(3, 0);
+                                for (int j = 0; j < preys.size(); j++) {
+                                    if (predators.get(i).get(0) == preys.get(j).get(0) && predators.get(i).get(1) + 1 == preys.get(j).get(1)) {
+                                        //System.out.println("eaten" + preys.get(j).get(0) + ", " + preys.get(j).get(1));
+                                        preys.get(j).set(0, -1);
+                                        preys.get(j).set(1, -1);
+                                        predators.get(i).set(2, predators.get(i).get(2) + 1);
+                                        predators.get(i).set(3, 0);
                                         break;
                                     }
                                 }
                             }
-                            grid[predator.get(i).get(0)][right] = 2;
-                            System.out.println("pred right from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
-                            predator.get(i).set(1, right);
+                            grid[predators.get(i).get(0)][right] = 2;
+                            //System.out.println("pred right from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
+                            predators.get(i).set(1, right);
 
                         }
                     }
                 }
                 // the predator dies if it hasn't eaten a prey in more than 20 steps
-                if (predator.get(i).get(3) > 20){
-                    predator.get(i).set(0, -1);
-                    predator.get(i).set(1, -1);
+                if (predators.get(i).get(3) > 20){
+                    grid[predators.get(i).get(0)][predators.get(i).get(1)] = 0;
+                    predators.get(i).set(0, -1);
+                    predators.get(i).set(1, -1);
                 }
             }
         }
-        return grid;
     }
 
     /**
@@ -372,39 +371,39 @@ public class PredatorSimulation {
      * @param prey  the arraylist of prey to reproduce
      * @return grid with reproduced prey
      */
-    public static int[][] preyRep(int[][] grid, ArrayList<ArrayList<Integer>> prey) {
+    public void preyRep() {
         int reproduced = 0;
         // loop through prey in the arraylist
-        for (int i = 0; i < prey.size() - reproduced; i++) {
+        for (int i = 0; i < preys.size() - reproduced; i++) {
             // only go through if prey are alive
-            if (prey.get(i).get(0) >= 0) {
-                int up = prey.get(i).get(0) - 1;
-                int down = prey.get(i).get(0) + 1;
-                int left = prey.get(i).get(1) - 1;
-                int right = prey.get(i).get(1) + 1;
+            if (preys.get(i).get(0) >= 0) {
+                int up = preys.get(i).get(0) - 1;
+                int down = preys.get(i).get(0) + 1;
+                int left = preys.get(i).get(1) - 1;
+                int right = preys.get(i).get(1) + 1;
                 boolean canUp = false;
                 boolean canDown = false;
                 boolean canLeft = false;
                 boolean canRight = false;
                 // check if each direction is empty
                 if (up >= 0) {
-                    if (grid[up][prey.get(i).get(1)] == 0) {
+                    if (grid[up][preys.get(i).get(1)] == 0) {
                         canUp = true;
 
                     }
                 }
                 if (down < grid.length) {
-                    if (grid[down][prey.get(i).get(1)] == 0) {
+                    if (grid[down][preys.get(i).get(1)] == 0) {
                         canDown = true;
                     }
                 }
                 if (left >= 0) {
-                    if (grid[prey.get(i).get(0)][left] == 0) {
+                    if (grid[preys.get(i).get(0)][left] == 0) {
                         canLeft = true;
                     }
                 }
                 if (right < grid[0].length) {
-                    if (grid[prey.get(i).get(0)][right] == 0) {
+                    if (grid[preys.get(i).get(0)][right] == 0) {
                         canRight = true;
                     }
                 }
@@ -413,45 +412,44 @@ public class PredatorSimulation {
                 if (canUp || canDown || canLeft || canRight) {
                     random = new Random().nextInt(100);
                     // 5% chance to reproduce up, increases for every step alive
-                    if (random < 5 + Math.min(prey.get(i).get(2), 20) && canUp) {
+                    if (random < 5 + Math.min(preys.get(i).get(2), 20) && canUp) {
                         // add prey to arraylist as well as its location
                         // add new prey to grid
-                        prey.add(new ArrayList<>());
-                        prey.get(prey.size() - 1).add(up);
-                        prey.get(prey.size() - 1).add(prey.get(i).get(1));
-                        prey.get(prey.size() - 1).add(0);
-                        grid[up][prey.get(i).get(1)] = 1;
-                        System.out.println("prey rep up from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
+                        preys.add(new ArrayList<>());
+                        preys.get(preys.size() - 1).add(up);
+                        preys.get(preys.size() - 1).add(preys.get(i).get(1));
+                        preys.get(preys.size() - 1).add(0);
+                        grid[up][preys.get(i).get(1)] = 1;
+                        //System.out.println("prey rep up from " + preys.get(i).get(0) + ", " + preys.get(i).get(1));
                         reproduced++;
-                    } else if (random >= 5 + Math.min(prey.get(i).get(2), 20) && random < 10 + Math.min(prey.get(i).get(2) * 2, 40) && canDown){
-                        prey.add(new ArrayList<>());
-                        prey.get(prey.size() - 1).add(down);
-                        prey.get(prey.size() - 1).add(prey.get(i).get(1));
-                        prey.get(prey.size() - 1).add(0);
-                        grid[down][prey.get(i).get(1)] = 1;
-                        System.out.println("prey rep down from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
+                    } else if (random >= 5 + Math.min(preys.get(i).get(2), 20) && random < 10 + Math.min(preys.get(i).get(2) * 2, 40) && canDown){
+                        preys.add(new ArrayList<>());
+                        preys.get(preys.size() - 1).add(down);
+                        preys.get(preys.size() - 1).add(preys.get(i).get(1));
+                        preys.get(preys.size() - 1).add(0);
+                        grid[down][preys.get(i).get(1)] = 1;
+                        //System.out.println("prey rep down from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
                         reproduced++;
-                    } else if (random >= 10 + Math.min(prey.get(i).get(2) * 2, 40) && random < 15 + Math.min(prey.get(i).get(2) * 3, 60) && canLeft){
-                        prey.add(new ArrayList<>());
-                        prey.get(prey.size() - 1).add(prey.get(i).get(0));
-                        prey.get(prey.size() - 1).add(left);
-                        prey.get(prey.size() - 1).add(0);
-                        grid[prey.get(i).get(0)][left] = 1;
-                        System.out.println("prey rep left from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
+                    } else if (random >= 10 + Math.min(preys.get(i).get(2) * 2, 40) && random < 15 + Math.min(preys.get(i).get(2) * 3, 60) && canLeft){
+                        preys.add(new ArrayList<>());
+                        preys.get(preys.size() - 1).add(preys.get(i).get(0));
+                        preys.get(preys.size() - 1).add(left);
+                        preys.get(preys.size() - 1).add(0);
+                        grid[preys.get(i).get(0)][left] = 1;
+                        //System.out.println("prey rep left from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
                         reproduced++;
-                    } else if (random >= 15 + Math.min(prey.get(i).get(2) * 3, 60)  && random < 20 + Math.min(prey.get(i).get(2) * 4, 80) && canRight) {
-                        prey.add(new ArrayList<>());
-                        prey.get(prey.size() - 1).add(prey.get(i).get(0));
-                        prey.get(prey.size() - 1).add(right);
-                        prey.get(prey.size() - 1).add(0);
-                        grid[prey.get(i).get(0)][right] = 1;
-                        System.out.println("prey rep right from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
+                    } else if (random >= 15 + Math.min(preys.get(i).get(2) * 3, 60)  && random < 20 + Math.min(preys.get(i).get(2) * 4, 80) && canRight) {
+                        preys.add(new ArrayList<>());
+                        preys.get(preys.size() - 1).add(preys.get(i).get(0));
+                        preys.get(preys.size() - 1).add(right);
+                        preys.get(preys.size() - 1).add(0);
+                        grid[preys.get(i).get(0)][right] = 1;
+                        //System.out.println("prey rep right from " + preys.get(i).get(0) + ", " + preys.get(i).get(1));
                         reproduced++;
                     }
                 }
             }
         }
-        return grid;
     }
     
     /**
@@ -461,37 +459,37 @@ public class PredatorSimulation {
      * @param predator  the arraylist of predators to reproduce
      * @return  the grid with newly reproduced predators
      */
-    public static int[][] predRep(int[][] grid, ArrayList<ArrayList<Integer>> predator){
+    public void predRep(){
         // loop through predators in the arraylist
-        for (int i = 0; i < predator.size(); i++){
+        for (int i = 0; i < predators.size(); i++){
             // only go through with the process if predators are alive and have eaten a prey in the last 10 steps
-            if (predator.get(i).get(3) <= 10 && predator.get(i).get(2) > 0 && predator.get(i).get(0) >= 0){
-                int up = predator.get(i).get(0) - 1;
-                int down = predator.get(i).get(0) + 1;
-                int left = predator.get(i).get(1) - 1;
-                int right = predator.get(i).get(1) + 1;
+            if (predators.get(i).get(3) <= 10 && predators.get(i).get(2) > 0 && predators.get(i).get(0) >= 0){
+                int up = predators.get(i).get(0) - 1;
+                int down = predators.get(i).get(0) + 1;
+                int left = predators.get(i).get(1) - 1;
+                int right = predators.get(i).get(1) + 1;
                 boolean canUp = false;
                 boolean canDown = false;
                 boolean canLeft = false;
                 boolean canRight = false;
                 // check if each direction is empty
                 if (up >= 0) {
-                    if (grid[up][predator.get(i).get(1)] == 0) {
+                    if (grid[up][predators.get(i).get(1)] == 0) {
                         canUp = true;
                     }
                 }
                 if (down < grid.length) {
-                    if (grid[down][predator.get(i).get(1)] == 0) {
+                    if (grid[down][predators.get(i).get(1)] == 0) {
                         canDown = true;
                     }
                 }
                 if (left >= 0) {
-                    if (grid[predator.get(i).get(0)][left] == 0) {
+                    if (grid[predators.get(i).get(0)][left] == 0) {
                         canLeft = true;
                     }
                 }
                 if (right < grid[0].length) {
-                    if (grid[predator.get(i).get(0)][right] == 0) {
+                    if (grid[predators.get(i).get(0)][right] == 0) {
                         canRight = true;
                     }
                 }
@@ -501,42 +499,41 @@ public class PredatorSimulation {
                     if (random < 2 && canUp) {
                         // add predator to arraylist as well as its location
                         // add new predator to grid
-                        predator.add(new ArrayList<>());
-                        predator.get(predator.size() - 1).add(up);
-                        predator.get(predator.size() - 1).add(predator.get(i).get(1));
-                        predator.get(predator.size() - 1).add(0);
-                        predator.get(predator.size() - 1).add(0);
-                        grid[up][predator.get(i).get(1)] = 2;
-                        System.out.println("pred rep up from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
+                        predators.add(new ArrayList<>());
+                        predators.get(predators.size() - 1).add(up);
+                        predators.get(predators.size() - 1).add(predators.get(i).get(1));
+                        predators.get(predators.size() - 1).add(0);
+                        predators.get(predators.size() - 1).add(0);
+                        grid[up][predators.get(i).get(1)] = 2;
+                        //System.out.println("pred rep up from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
                     } else if (random >= 2 && random < 4 && canDown){
-                        predator.add(new ArrayList<>());
-                        predator.get(predator.size() - 1).add(down);
-                        predator.get(predator.size() - 1).add(predator.get(i).get(1));
-                        predator.get(predator.size() - 1).add(0);
-                        predator.get(predator.size() - 1).add(0);
-                        grid[down][predator.get(i).get(1)] = 2;
-                        System.out.println("pred rep down from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
+                        predators.add(new ArrayList<>());
+                        predators.get(predators.size() - 1).add(down);
+                        predators.get(predators.size() - 1).add(predators.get(i).get(1));
+                        predators.get(predators.size() - 1).add(0);
+                        predators.get(predators.size() - 1).add(0);
+                        grid[down][predators.get(i).get(1)] = 2;
+                        //System.out.println("pred rep down from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
                     } else if (random >= 4 && random < 6 && canLeft){
-                        predator.add(new ArrayList<>());
-                        predator.get(predator.size() - 1).add(predator.get(i).get(0));
-                        predator.get(predator.size() - 1).add(left);
-                        predator.get(predator.size() - 1).add(0);
-                        predator.get(predator.size() - 1).add(0);
-                        grid[predator.get(i).get(0)][left] = 2;
-                        System.out.println("pred rep left from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
+                        predators.add(new ArrayList<>());
+                        predators.get(predators.size() - 1).add(predators.get(i).get(0));
+                        predators.get(predators.size() - 1).add(left);
+                        predators.get(predators.size() - 1).add(0);
+                        predators.get(predators.size() - 1).add(0);
+                        grid[predators.get(i).get(0)][left] = 2;
+                       // System.out.println("pred rep left from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
                     } else if (random >= 6 && random < 8 && canRight) {
-                        predator.add(new ArrayList<>());
-                        predator.get(predator.size() - 1).add(predator.get(i).get(0));
-                        predator.get(predator.size() - 1).add(right);
-                        predator.get(predator.size() - 1).add(0);
-                        predator.get(predator.size() - 1).add(0);
-                        grid[predator.get(i).get(0)][right] = 2;
-                        System.out.println("pred rep right from " + predator.get(i).get(0) + ", " + predator.get(i).get(1));
+                        predators.add(new ArrayList<>());
+                        predators.get(predators.size() - 1).add(predators.get(i).get(0));
+                        predators.get(predators.size() - 1).add(right);
+                        predators.get(predators.size() - 1).add(0);
+                        predators.get(predators.size() - 1).add(0);
+                        grid[predators.get(i).get(0)][right] = 2;
+                       // System.out.println("pred rep right from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
                     }
                 }
             }
         }
-        return grid;
     }
     
     /**
@@ -547,7 +544,7 @@ public class PredatorSimulation {
      * @param predator  the predator arraylist that gets affected by the fires
      * @return 
      */
-    public static int[][] forestFire(int[][] grid, ArrayList<ArrayList<Integer>> prey, ArrayList<ArrayList<Integer>> predator){
+    public void forestFire(){
         // 5% chance to summon a forest fire, generate a random number, a random size, and a random location
         int random = new Random().nextInt(100);
         int activate = 5;
@@ -555,22 +552,22 @@ public class PredatorSimulation {
         if (random < activate){
             int size = new Random().nextInt(grid.length -2) + 1;
             int location = new Random().nextInt(grid.length-size);
-            System.out.println("forest fire from " + location + ", " + location + " to " + (location+size) + ", " + (location+size));
+            //System.out.println("forest fire from " + location + ", " + location + " to " + (location+size) + ", " + (location+size));
             for (int i = location; i <= location + size; i++){
                 for (int j = location; j <= location + size; j++){
-                    for (int k = 0; k < prey.size(); k++){
+                    for (int k = 0; k < preys.size(); k++){
                         // if prey is in the forest fire, kill it
-                        if (i == prey.get(k).get(0) && j == prey.get(k).get(1)){
-                            prey.get(k).set(0, -1);
-                            prey.get(k).set(1, -1);
+                        if (i == preys.get(k).get(0) && j == preys.get(k).get(1)){
+                            preys.get(k).set(0, -1);
+                            preys.get(k).set(1, -1);
                             grid[i][j] = 0;
                         }
                     }
-                    for (int k = 0; k < predator.size(); k++){
+                    for (int k = 0; k < predators.size(); k++){
                         // if predator is in forest fire, kill it
-                        if (i == predator.get(k).get(0) && j == predator.get(k).get(1)){
-                            predator.get(k).set(0, -1);
-                            predator.get(k).set(0, -1);
+                        if (i == predators.get(k).get(0) && j == predators.get(k).get(1)){
+                            predators.get(k).set(0, -1);
+                            predators.get(k).set(0, -1);
                             grid[i][j] = 0;
                         }
                     }
@@ -578,7 +575,6 @@ public class PredatorSimulation {
             }
         }
         
-        return grid;
     }
     
     /**
