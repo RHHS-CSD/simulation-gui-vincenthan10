@@ -412,7 +412,7 @@ public class PredatorSimulation {
                 if (canUp || canDown || canLeft || canRight) {
                     random = new Random().nextInt(100);
                     // 5% chance to reproduce up, increases for every step alive
-                    if (random < 5 + Math.min(preys.get(i).get(2), 20) && canUp) {
+                    if (random < 5 + Math.min(preys.get(i).get(2)/2, 10) && canUp) {
                         // add prey to arraylist as well as its location
                         // add new prey to grid
                         preys.add(new ArrayList<>());
@@ -422,7 +422,7 @@ public class PredatorSimulation {
                         grid[up][preys.get(i).get(1)] = 1;
                         //System.out.println("prey rep up from " + preys.get(i).get(0) + ", " + preys.get(i).get(1));
                         reproduced++;
-                    } else if (random >= 5 + Math.min(preys.get(i).get(2), 20) && random < 10 + Math.min(preys.get(i).get(2) * 2, 40) && canDown){
+                    } else if (random >= 5 + Math.min(preys.get(i).get(2)/2, 10) && random < 10 + Math.min(preys.get(i).get(2), 20) && canDown){
                         preys.add(new ArrayList<>());
                         preys.get(preys.size() - 1).add(down);
                         preys.get(preys.size() - 1).add(preys.get(i).get(1));
@@ -430,7 +430,7 @@ public class PredatorSimulation {
                         grid[down][preys.get(i).get(1)] = 1;
                         //System.out.println("prey rep down from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
                         reproduced++;
-                    } else if (random >= 10 + Math.min(preys.get(i).get(2) * 2, 40) && random < 15 + Math.min(preys.get(i).get(2) * 3, 60) && canLeft){
+                    } else if (random >= 10 + Math.min(preys.get(i).get(2), 20) && random < 15 + Math.min(preys.get(i).get(2) * 3/2, 30) && canLeft){
                         preys.add(new ArrayList<>());
                         preys.get(preys.size() - 1).add(preys.get(i).get(0));
                         preys.get(preys.size() - 1).add(left);
@@ -438,7 +438,7 @@ public class PredatorSimulation {
                         grid[preys.get(i).get(0)][left] = 1;
                         //System.out.println("prey rep left from " + prey.get(i).get(0) + ", " + prey.get(i).get(1));
                         reproduced++;
-                    } else if (random >= 15 + Math.min(preys.get(i).get(2) * 3, 60)  && random < 20 + Math.min(preys.get(i).get(2) * 4, 80) && canRight) {
+                    } else if (random >= 15 + Math.min(preys.get(i).get(2) * 3/2, 30)  && random < 20 + Math.min(preys.get(i).get(2) * 2, 40) && canRight) {
                         preys.add(new ArrayList<>());
                         preys.get(preys.size() - 1).add(preys.get(i).get(0));
                         preys.get(preys.size() - 1).add(right);
@@ -496,7 +496,7 @@ public class PredatorSimulation {
                 int random = -1;
                 if (canUp || canDown || canLeft || canRight){
                     random = new Random().nextInt(100);
-                    if (random < 2 && canUp) {
+                    if (random < 1 && canUp) {
                         // add predator to arraylist as well as its location
                         // add new predator to grid
                         predators.add(new ArrayList<>());
@@ -506,7 +506,7 @@ public class PredatorSimulation {
                         predators.get(predators.size() - 1).add(0);
                         grid[up][predators.get(i).get(1)] = 2;
                         //System.out.println("pred rep up from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
-                    } else if (random >= 2 && random < 4 && canDown){
+                    } else if (random >= 1 && random < 2 && canDown){
                         predators.add(new ArrayList<>());
                         predators.get(predators.size() - 1).add(down);
                         predators.get(predators.size() - 1).add(predators.get(i).get(1));
@@ -514,7 +514,7 @@ public class PredatorSimulation {
                         predators.get(predators.size() - 1).add(0);
                         grid[down][predators.get(i).get(1)] = 2;
                         //System.out.println("pred rep down from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
-                    } else if (random >= 4 && random < 6 && canLeft){
+                    } else if (random >= 2 && random < 3 && canLeft){
                         predators.add(new ArrayList<>());
                         predators.get(predators.size() - 1).add(predators.get(i).get(0));
                         predators.get(predators.size() - 1).add(left);
@@ -522,7 +522,7 @@ public class PredatorSimulation {
                         predators.get(predators.size() - 1).add(0);
                         grid[predators.get(i).get(0)][left] = 2;
                        // System.out.println("pred rep left from " + predators.get(i).get(0) + ", " + predators.get(i).get(1));
-                    } else if (random >= 6 && random < 8 && canRight) {
+                    } else if (random >= 3 && random < 4 && canRight) {
                         predators.add(new ArrayList<>());
                         predators.get(predators.size() - 1).add(predators.get(i).get(0));
                         predators.get(predators.size() - 1).add(right);
@@ -547,10 +547,10 @@ public class PredatorSimulation {
     public void forestFire(){
         // 5% chance to summon a forest fire, generate a random number, a random size, and a random location
         int random = new Random().nextInt(100);
-        int activate = 5;
-        // if the 5% is met, check if the prey and predator are in the same place as the forest fire
+        int activate = 1;
+        // if the 1% is met, check if the prey and predator are in the same place as the forest fire
         if (random < activate){
-            int size = new Random().nextInt(grid.length -2) + 1;
+            int size = new Random().nextInt(grid.length-1) + 1;
             int location = new Random().nextInt(grid.length-size);
             //System.out.println("forest fire from " + location + ", " + location + " to " + (location+size) + ", " + (location+size));
             for (int i = location; i <= location + size; i++){
