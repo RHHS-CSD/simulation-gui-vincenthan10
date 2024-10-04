@@ -46,6 +46,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     int cellHeight;
     int numPrey;
     int numPred;
+    int steps;
     boolean add;
     PredatorSimulation simulation;
 
@@ -73,8 +74,8 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         heightSlider.setPaintTrack(true);
         
         preySlider.setMinimum(20);
-        preySlider.setMaximum(85);
-        preySlider.setValue(50);
+        preySlider.setMaximum(80);
+        preySlider.setValue(60);
         preySlider.setMajorTickSpacing(20);
         preySlider.setMinorTickSpacing(10);
         preySlider.setPaintLabels(true);
@@ -83,15 +84,15 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         
         predatorSlider.setMinimum(5);
         predatorSlider.setMaximum(15);
-        predatorSlider.setValue(10);
+        predatorSlider.setValue(8);
         predatorSlider.setMajorTickSpacing(5);
         predatorSlider.setPaintLabels(true);
         predatorSlider.setPaintTicks(true);
         predatorSlider.setPaintTrack(true);
         
         speedSlider.setMinimum(1);
-        speedSlider.setMaximum(5);
-        speedSlider.setValue(2);
+        speedSlider.setMaximum(10);
+        speedSlider.setValue(5);
         speedSlider.setMajorTickSpacing(1);
         speedSlider.setPaintLabels(true);
         speedSlider.setPaintTicks(true);
@@ -113,6 +114,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         //create and start a Timer for animation
         animTimer = new Timer(60, new AnimTimerTick());
 
+        steps = 0;
         //set up the key bindings
         setupKeys();
 
@@ -136,6 +138,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (add){
+            animTimer.setDelay(60 / speedSlider.getValue() * 5);
             numPred = 0;
             numPrey = 0;
             for (int i = 0; i < simulation.grid.length; i++){
@@ -154,8 +157,9 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
                     g.drawRect(initialX + cellWidth * i, initialY + cellHeight * j, cellWidth, cellHeight);
                 }
             }
-            g.drawString("Number of prey: " + numPrey, 10, 540);
-            g.drawString("Number of predators: " + numPred, 7, 560);
+            g.drawString("Number of prey: " + numPrey, 10, 520);
+            g.drawString("Number of predators: " + numPred, 7, 540);
+            g.drawString("Steps: " + steps, 12, 560);
             if (numPrey == 0 && numPred == 0){
                 animTimer.stop();
                 resetButton.setVisible(true);
@@ -190,6 +194,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         stopButton = new javax.swing.JButton();
         speedSlider = new javax.swing.JSlider();
         speedLabel = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1080, 580));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -236,6 +241,13 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
 
         speedLabel.setText("Change speed:");
 
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -262,6 +274,10 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
                     .addComponent(speedLabel)
                     .addComponent(startButton))
                 .addContainerGap(950, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backButton)
+                .addGap(59, 59, 59))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,7 +310,9 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
                 .addComponent(stopButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(resetButton)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addComponent(backButton)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -330,6 +348,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         stopButton.setVisible(false);
         speedLabel.setVisible(false);
         speedSlider.setVisible(false);
+        steps = 0;
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
@@ -338,8 +357,22 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         resetButton.setVisible(true);
     }//GEN-LAST:event_stopButtonActionPerformed
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        animTimer.stop();
+        steps = 0;
+        add = false;
+        switcher.switchToCard(IntroPanel.CARD_NAME);
+        stopButton.setVisible(false);
+        speedLabel.setVisible(false);
+        speedSlider.setVisible(false);
+        startButton.setVisible(false);
+        resetButton.setVisible(false);
+    }//GEN-LAST:event_backButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JButton createButton;
     private javax.swing.JLabel heiLabel;
     private javax.swing.JSlider heightSlider;
@@ -443,6 +476,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
             simulation.preyRep();
             simulation.predRep();
             simulation.forestFire();
+            steps++;
             //force redraw
             repaint();
         }
