@@ -8,7 +8,10 @@ package automatastarter;
 import utils.CardSwitcher;
 import java.awt.CardLayout;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  *
@@ -17,6 +20,13 @@ import javax.swing.JPanel;
 public class IntroPanel extends javax.swing.JPanel {
         public static final String CARD_NAME = "intro";
     CardSwitcher switcher = null;
+        PredatorSimulation simulation;
+        int initialX = 420;
+        int initialY = 100;
+        int cellWidth;
+        int cellHeight;
+        Timer animTimer;
+
     /**
      * Creates new form IntroPanel
      */
@@ -24,7 +34,32 @@ public class IntroPanel extends javax.swing.JPanel {
         initComponents();
         switcher = p;
         title.setFont(new Font("Dialog", Font.BOLD, 20));
+        simulation = new PredatorSimulation(5, 5, 1, 10);
+        simulation.fillGrid();
+        animTimer = new Timer(450, new IntroPanel.AnimTimerTick());
+        animTimer.start();
+        cellWidth = 50;
+        cellHeight = 50;
+        this.setFocusable(true);
         
+    }
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        for (int i = 0; i < simulation.grid.length; i++){
+            for (int j = 0; j < simulation.grid[i].length; j++){
+                if (simulation.grid[i][j] == 2){
+                    g.setColor(Color.RED);
+                } else if (simulation.grid[i][j] == 1){
+                    g.setColor(Color.CYAN);
+                } else {
+                    g.setColor(Color.WHITE);
+                }
+                g.fillRect(initialX + cellWidth * i, initialY + cellHeight * j, cellWidth, cellHeight);
+                g.setColor(Color.BLACK);
+                g.drawRect(initialX + cellWidth * i, initialY + cellHeight * j, cellWidth, cellHeight);
+            }
+        }
+        repaint();
     }
 
     /**
@@ -39,6 +74,8 @@ public class IntroPanel extends javax.swing.JPanel {
         GameButton = new javax.swing.JButton();
         infoButton = new javax.swing.JButton();
         title = new javax.swing.JLabel();
+
+        setPreferredSize(new java.awt.Dimension(1080, 580));
 
         GameButton.setText("Game");
         GameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -62,26 +99,26 @@ public class IntroPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(125, 125, 125)
+                .addGap(419, 419, 419)
                 .addComponent(title)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(454, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(GameButton)
-                    .addComponent(infoButton))
-                .addGap(161, 161, 161))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(infoButton)
+                    .addComponent(GameButton))
+                .addGap(493, 493, 493))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 292, Short.MAX_VALUE)
                 .addComponent(GameButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(infoButton)
-                .addGap(47, 47, 47))
+                .addGap(130, 130, 130))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -99,4 +136,16 @@ public class IntroPanel extends javax.swing.JPanel {
     private javax.swing.JButton infoButton;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
+
+    private class AnimTimerTick implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            simulation.movePrey();
+            simulation.movePred();
+            simulation.preyRep();
+            simulation.predRep();
+            repaint();
+        }
+    }
 }
