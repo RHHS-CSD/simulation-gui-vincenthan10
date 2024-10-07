@@ -31,14 +31,12 @@ import javax.swing.Timer;
  *
  * @author michael.roy-diclemen
  */
-public class GamePanel extends javax.swing.JPanel implements MouseListener {
+public class GamePanel extends javax.swing.JPanel {
 
     public static final String CARD_NAME = "game";
 
     CardSwitcher switcher; // This is the parent panel
     Timer animTimer;
-    // Image img1 = Toolkit.getDefaultToolkit().getImage("yourFile.jpg");
-    BufferedImage img1;
     //variables to control your animation elements
     int initialX = 150;
     int initialY = 40;
@@ -56,7 +54,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     public GamePanel(CardSwitcher p) {
         initComponents();
 
-        //img1 = ImageUtil.loadAndResizeImage("yourFile.jpg", 300, 300);//, WIDTH, HEIGHT)//ImageIO.read(new File("yourFile.jpg"));
+        // Set slider intervals and labels
         widthSlider.setMinimum(5);
         widthSlider.setMaximum(30);
         widthSlider.setValue(10);
@@ -108,7 +106,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
         this.setFocusable(true);
 
         // tell the program we want to listen to the mouse
-        addMouseListener(this);
+        //addMouseListener(this);
         //tells us the panel that controls this one
         switcher = p;
         //create and start a Timer for animation
@@ -116,33 +114,36 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
 
         steps = 0;
         //set up the key bindings
-        setupKeys();
+        //setupKeys();
 
     }
 
-    private void setupKeys() {
-        //these lines map a physical key, to a name, and then a name to an 'action'.  You will change the key, name and action to suit your needs
-        this.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftKey");
-        this.getActionMap().put("leftKey", new Move("LEFT"));
-
-        this.getInputMap().put(KeyStroke.getKeyStroke("W"), "wKey");
-        this.getActionMap().put("wKey", new Move("w"));
-
-        this.getInputMap().put(KeyStroke.getKeyStroke("D"), "dKey");
-        this.getActionMap().put("dKey", new Move("d"));
-
-        this.getInputMap().put(KeyStroke.getKeyStroke("X"), "xKey");
-        this.getActionMap().put("xKey", new Move("x"));
-    }
+//    private void setupKeys() {
+//        //these lines map a physical key, to a name, and then a name to an 'action'.  You will change the key, name and action to suit your needs
+//        this.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftKey");
+//        this.getActionMap().put("leftKey", new Move("LEFT"));
+//
+//        this.getInputMap().put(KeyStroke.getKeyStroke("W"), "wKey");
+//        this.getActionMap().put("wKey", new Move("w"));
+//
+//        this.getInputMap().put(KeyStroke.getKeyStroke("D"), "dKey");
+//        this.getActionMap().put("dKey", new Move("d"));
+//
+//        this.getInputMap().put(KeyStroke.getKeyStroke("X"), "xKey");
+//        this.getActionMap().put("xKey", new Move("x"));
+//    }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        // Display grid when user has clicked on "Create grid"
         if (add){
+            // Set delay to the value of the slider, default is 5
             animTimer.setDelay(60 / speedSlider.getValue() * 5);
             numPred = 0;
             numPrey = 0;
             for (int i = 0; i < simulation.grid.length; i++){
                 for (int j = 0; j < simulation.grid[i].length; j++){
+                    // Predators are red, prey are blue, and everything else is white
                     if (simulation.grid[i][j] == 2){
                         g.setColor(Color.RED);
                         numPred++;
@@ -153,13 +154,15 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
                         g.setColor(Color.WHITE);
                     }
                     g.fillRect(initialX + cellWidth * i, initialY + cellHeight * j, cellWidth, cellHeight);
+                    // Outline
                     g.setColor(Color.BLACK);
                     g.drawRect(initialX + cellWidth * i, initialY + cellHeight * j, cellWidth, cellHeight);
                 }
             }
-            g.drawString("Number of prey: " + numPrey, 10, 520);
-            g.drawString("Number of predators: " + numPred, 7, 540);
+            g.drawString("Number of prey (blue): " + numPrey, 5, 520);
+            g.drawString("Number of predators (red): " + numPred, 1, 540);
             g.drawString("Steps: " + steps, 12, 560);
+            // Stop the simulation when all prey and predators are dead
             if (numPrey == 0 && numPred == 0){
                 animTimer.stop();
                 resetButton.setVisible(true);
@@ -320,8 +323,8 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     }//GEN-LAST:event_formComponentShown
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        // TODO add your handling code here:
         if (!add){
+            // Create simulation grid and set size of each cell according to what its width and height is
             add = true;
             simulation = new PredatorSimulation(widthSlider.getValue(), heightSlider.getValue(), widthSlider.getValue() * heightSlider.getValue() * predatorSlider.getValue() / 100, widthSlider.getValue() * heightSlider.getValue() * preySlider.getValue() / 100);
             simulation.fillGrid();
@@ -332,7 +335,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        // TODO add your handling code here:
+        // Start the simulation
         animTimer.start();
         stopButton.setVisible(true);
         resetButton.setVisible(false);
@@ -341,7 +344,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        // TODO add your handling code here:
+        // Remove the grid, reset everything
         add = false;
         resetButton.setVisible(false);
         startButton.setVisible(false);
@@ -352,13 +355,13 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
-        // TODO add your handling code here:
+        // Pause the simulation
         animTimer.stop();
         resetButton.setVisible(true);
     }//GEN-LAST:event_stopButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        // TODO add your handling code here:
+        // Reset everything and switch to IntroPanel
         animTimer.stop();
         steps = 0;
         add = false;
@@ -395,73 +398,73 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
      *
      * @param me
      */
-    public void mouseClicked(MouseEvent me) {
-        System.out.println("Click: " + me.getX() + ":" + me.getY());
-        //x = 5;
-        //y = 5;
-    }
-
-    /**
-     * When the mountain is pressed
-     *
-     * @param me
-     */
-    public void mousePressed(MouseEvent me) {
-        System.out.println("Press: " + me.getX() + ":" + me.getY());
-    }
-
-    /**
-     * When the mouse button is released
-     *
-     * @param me
-     */
-    public void mouseReleased(MouseEvent me) {
-        System.out.println("Release: " + me.getX() + ":" + me.getY());
-    }
-
-    /**
-     * When the mouse enters the area
-     *
-     * @param me
-     */
-    public void mouseEntered(MouseEvent me) {
-        System.out.println("Enter: " + me.getX() + ":" + me.getY());
-    }
-
-    /**
-     * When the mouse exits the panel
-     *
-     * @param me
-     */
-    public void mouseExited(MouseEvent me) {
-        System.out.println("Exit: " + me.getX() + ":" + me.getY());
-    }
-
-    /**
-     * Everything inside here happens when you click on a captured key.
-     */
-    private class Move extends AbstractAction {
-
-        String key;
-
-        public Move(String akey) {
-            key = akey;
-        }
-
-        public void actionPerformed(ActionEvent ae) {
-            // here you decide what you want to happen if a particular key is pressed
-            System.out.println("llll" + key);
-            switch(key){
-                //case "d": x+=2; break;
-                case "x": animTimer.stop(); switcher.switchToCard(EndPanel.CARD_NAME); break;
-            }
-            if (key.equals("d")) {
-                //x = x + 2;
-            }
-            
-        }
-
-    }
+//    public void mouseClicked(MouseEvent me) {
+//        System.out.println("Click: " + me.getX() + ":" + me.getY());
+//        //x = 5;
+//        //y = 5;
+//    }
+//
+//    /**
+//     * When the mountain is pressed
+//     *
+//     * @param me
+//     */
+//    public void mousePressed(MouseEvent me) {
+//        System.out.println("Press: " + me.getX() + ":" + me.getY());
+//    }
+//
+//    /**
+//     * When the mouse button is released
+//     *
+//     * @param me
+//     */
+//    public void mouseReleased(MouseEvent me) {
+//        System.out.println("Release: " + me.getX() + ":" + me.getY());
+//    }
+//
+//    /**
+//     * When the mouse enters the area
+//     *
+//     * @param me
+//     */
+//    public void mouseEntered(MouseEvent me) {
+//        System.out.println("Enter: " + me.getX() + ":" + me.getY());
+//    }
+//
+//    /**
+//     * When the mouse exits the panel
+//     *
+//     * @param me
+//     */
+//    public void mouseExited(MouseEvent me) {
+//        System.out.println("Exit: " + me.getX() + ":" + me.getY());
+//    }
+//
+//    /**
+//     * Everything inside here happens when you click on a captured key.
+//     */
+//    private class Move extends AbstractAction {
+//
+//        String key;
+//
+//        public Move(String akey) {
+//            key = akey;
+//        }
+//
+//        public void actionPerformed(ActionEvent ae) {
+//            // here you decide what you want to happen if a particular key is pressed
+//            System.out.println("llll" + key);
+//            switch(key){
+//                //case "d": x+=2; break;
+//                case "x": animTimer.stop(); switcher.switchToCard(EndPanel.CARD_NAME); break;
+//            }
+//            if (key.equals("d")) {
+//                //x = x + 2;
+//            }
+//            
+//        }
+//
+//    }
 
     /**
      * Everything inside this actionPerformed will happen every time the
@@ -471,6 +474,7 @@ public class GamePanel extends javax.swing.JPanel implements MouseListener {
 
         public void actionPerformed(ActionEvent ae) {
             //the stuff we want to change every clock tick
+            // Every step, move the prey and predators, reproduce, and cause a forest fire at a 1% chance
             simulation.movePrey();
             simulation.movePred();
             simulation.preyRep();

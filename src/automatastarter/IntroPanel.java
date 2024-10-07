@@ -34,6 +34,7 @@ public class IntroPanel extends javax.swing.JPanel {
         initComponents();
         switcher = p;
         title.setFont(new Font("Dialog", Font.BOLD, 20));
+        // Create a small sample simulation to give user idea of what to expect
         simulation = new PredatorSimulation(5, 5, 1, 10);
         simulation.fillGrid();
         animTimer = new Timer(450, new IntroPanel.AnimTimerTick());

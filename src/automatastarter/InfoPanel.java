@@ -7,6 +7,8 @@ package automatastarter;
 
 import utils.CardSwitcher;
 import java.awt.CardLayout;
+import java.awt.Font;
+import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
@@ -23,6 +25,24 @@ public class InfoPanel extends javax.swing.JPanel {
         initComponents();
         switcher = p;
     }
+    
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.setFont(new Font("Dialog", Font.PLAIN, 16));
+        g.drawString("This is a simulation for the progression of predators and prey.", 340, 110);
+        g.drawString("To start the simulation, pick a width, height, number of predators, and number of prey and click Create grid.", 225, 135);
+        g.drawString("This will create a grid with those dimensions filled the predators and prey placed in random positions.", 235, 160);
+        g.drawString("When you click Start, the predators and prey will start moving one step in random directions.", 250, 185);
+        g.drawString("If prey have nowhere to move, they die. If predators are next to prey, they eat the prey.", 260, 210);
+        g.drawString("After each step prey make, they have a chance to reproduce in an available cell next to them.", 245, 235);
+        g.drawString("This chance increases every step they survive.", 390, 260);
+        g.drawString("Predators have a small chance to reproduce if they have eaten a prey in the last 10 steps.", 260, 285);
+        g.drawString("If they have not eaten any prey in the last 20 steps, they die.", 340, 310);
+        g.drawString("After every step, there is a small chance that forest fire erupt and kill everything in its radius.", 240, 335);
+        g.drawString("Its radius and location are random.", 435, 360);
+        g.drawString("The simulation ends when all prey and predators are dead.", 360, 385);
+        g.drawString("You can change the speed of the simulation using the slider.", 350, 410);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,6 +54,8 @@ public class InfoPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         backButton = new javax.swing.JButton();
+
+        setPreferredSize(new java.awt.Dimension(1080, 580));
 
         backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -47,16 +69,16 @@ public class InfoPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(151, 151, 151)
+                .addGap(506, 506, 506)
                 .addComponent(backButton)
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addContainerGap(509, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(464, Short.MAX_VALUE)
                 .addComponent(backButton)
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addGap(87, 87, 87))
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -25,20 +25,6 @@ public class PredatorSimulation {
     int numPreys;
     ArrayList<ArrayList<Integer>> preys;
 
-//        fillGrid(grid, width, height, predators, preys);
-//        printGrid(grid);
-//
-//        String in = s.nextLine();
-//        while (!in.equals("x")) {
-//            grid = movePrey(grid, preys);
-//            grid = movePred(grid, preys, predators);
-//            grid = preyRep(grid, preys);
-//            grid = predRep(grid, predators);
-//            grid = forestFire(grid, preys, predators);
-//            printGrid(grid);
-//            in = s.nextLine();
-//        }
-
     public PredatorSimulation(int width, int height, int numPreds, int numPreys){
         this.width = width;
         this.height = height;
